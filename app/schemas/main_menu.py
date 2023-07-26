@@ -1,0 +1,18 @@
+from pydantic import BaseModel, Field, field_validator
+
+
+class MainMenuCreate(BaseModel):
+    title: str = Field(..., min_length=1, max_length=100)
+    description: str
+
+
+class MainMenuUpdate(BaseModel):
+    title: str = Field(..., min_length=1, max_length=100)
+    description: str
+
+    @field_validator('title', mode='before')
+    @classmethod
+    def name_cannot_be_null(cls, value):
+        if value is None:
+            raise ValueError('Название меню не может быть пустым!')
+        return value
